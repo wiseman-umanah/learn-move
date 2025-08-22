@@ -4,13 +4,15 @@ use std::string::String;
 
 public struct TodoList has key, store {
 	id: UID,
-	items: vector<String>
+	items: vector<String>,
+	name: String
 }
 
-public fun new(ctx: &mut TxContext): TodoList {
+public fun new(ctx: &mut TxContext, name: String): TodoList {
 	let list = TodoList {
 		id: object::new(ctx),
-		items: vector[]
+		items: vector[],
+		name: name
 	};
 
 	(list)
@@ -25,7 +27,7 @@ public fun remove(list: &mut TodoList, index: u64): String {
 }
 
 public fun delete(list: TodoList) {
-	let TodoList { id, items: _ } = list;
+	let TodoList { id, items: _, name: _ } = list;
 	id.delete();
 }
 
@@ -33,3 +35,6 @@ public fun length(list: &TodoList): u64 {
 	list.items.length()
 }
 
+public fun name(self: &TodoList): String {
+	self.name
+}
