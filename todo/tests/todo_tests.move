@@ -90,3 +90,42 @@ fun remove_item_from_todo() {
 
     scenario.end();
 }
+
+
+#[test]
+fun remove_item_from_todo2() {
+    let user = @0xCa;
+    let item1 = string::utf8(b"Hello world");
+    let item2 = string::utf8(b"This is what I want");
+    let item3 = string::utf8(b"Is this it");
+
+    let mut scenario = test_scenario::begin(user);
+
+    {
+        let ctx = scenario.ctx();
+        let list = todo::new(ctx, string::utf8(b"My New List"));
+        transfer::public_share_object(list);
+    };
+
+    scenario.next_tx(user);
+    {
+        let mut list = test_scenario::take_shared<TodoList>(&scenario);
+        todo::add(&mut list, item1);
+        todo::add(&mut list, item2);
+        todo::add(&mut list, item3);
+        assert!(todo::length(&list) == 3, 0);
+        test_scenario::return_shared(list);
+    };
+
+    scenario.next_tx(user);
+    {
+        let mut list = test_scenario::take_shared<TodoList>(&scenario);
+        todo::remove(&mut list, 0);
+
+        assert!(todo::length(&list)==2, 0);
+
+        test_scenario::return_shared(list);
+    };
+
+    scenario.end();
+}
