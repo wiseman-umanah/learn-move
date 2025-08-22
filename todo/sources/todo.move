@@ -35,6 +35,6 @@ public fun length(list: &TodoList): u64 {
 	list.items.length()
 }
 
-public fun name(self: &TodoList): String {
-	self.name
+public fun name(list: &TodoList): String {
+	list.name
 }
