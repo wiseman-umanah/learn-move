@@ -16,7 +16,9 @@
     "@tanstack/react-query": "^5.85.5",
     "react": "18",
     "react-dom": "18",
-    "tailwindcss": "^4.1.12"
+    "react-joyride": "^2.9.3",
+    "tailwindcss": "^4.1.12",
+    "toastify": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
@@ -27,6 +29,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "react-toastify": "^11.0.5",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2"

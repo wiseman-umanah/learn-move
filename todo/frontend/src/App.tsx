@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { ConnectButton, useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
 import "@mysten/dapp-kit/dist/index.css";
 import { Transaction } from "@mysten/sui/transactions";
+import Joyride from 'react-joyride';
+import { toast } from "react-toastify";
 
 
 const PACKAGE_ID: string = "0xe4e4e92c4526a680477791be3e3f54cccc22799f76325201921ce64408760216"
@@ -12,6 +14,22 @@ const TODO_LIST_TYPE = `${PACKAGE_ID}::${MODULE_NAME}::TodoList`;
 
 export default function App() {
   const client = useSuiClient();
+  const [showTour, setShowTour] = useState(() => {
+    return localStorage.getItem('todolist-joyride') !== 'done';
+  });
+
+  const joyrideSteps = [
+    {
+      target: '.connect-joyride',
+      content: 'Connect your wallet to start exploring',
+      disableBeacon: true,
+    },
+    {
+      target: '.todo-joyride',
+      content: 'Create a Todo new List and add items to do',
+    },
+  ];
+
   const account = useCurrentAccount();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
 
@@ -20,6 +38,14 @@ export default function App() {
   const [selectedTodoListId, setSelectedTodoListId] = useState<string | null>(
     null
   );
+
+  const handleJoyrideCallback = (data: any) => {
+    if (data.status === 'finished' || data.status === 'skipped') {
+      setShowTour(false);
+      localStorage.setItem('todolist-joyride', 'done');
+    }
+  };
+
   const [listName, setListName] = useState("");
   const [newItem, setNewItem] = useState("");
   const [items, setItems] = useState<string[]>([]);
@@ -77,7 +103,10 @@ export default function App() {
   };
 
   const createTodoList = async () => {
-    if (!account) return;
+    if (!account) {
+		toast.error('Connect your wallet first');
+		return;
+	}
     setLoading(true);
     setError(null);
     try {
@@ -119,7 +148,10 @@ export default function App() {
   };
 
   const deleteTodoList = async (id: string) => {
-    if (!account) return;
+    if (!account) {
+		toast.error('Connect your wallet first');
+		return;
+	}
     setLoading(true);
     setError(null);
     try {
@@ -146,7 +178,6 @@ export default function App() {
   };
 
   const addItem = async () => {
-  console.log("hello")
     if (!account) return;
     if (!selectedListId) return;
     setLoading(true);
@@ -173,7 +204,10 @@ export default function App() {
   };
 
   const removeItem = async (index: number) => {
-    if (!account) return;
+   if (!account) {
+		toast.error('Connect your wallet first');
+		return;
+	}
 	if (!selectedListId) return;
     setLoading(true);
     setError(null);
@@ -214,8 +248,57 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 relative p-4 md:p-8">
+		{showTour && (
+			<Joyride
+			steps={joyrideSteps}
+			continuous
+			showSkipButton
+			showProgress
+			styles={{
+				options: {
+				zIndex: 10000,
+				primaryColor: '#ffffff', 
+				backgroundColor: '#ffffff',
+				textColor: '#000000',
+				arrowColor: '#ffffff',
+				// overlayColor: 'rgba(0,0,0,0.7)',
+				// width: 380,
+				spotlightShadow: '0 0 0 1px #000000',
+				},
+				buttonNext: {
+				backgroundColor: '#000000',
+				color: '#ffffff',
+				fontWeight: 700,
+				borderRadius: 4,
+				boxShadow: '0 0 0 2px #ffffff',
+				},
+				buttonBack: {
+				color: '#000000',
+				background: 'transparent',
+				fontWeight: 700,
+				},
+				buttonSkip: {
+				color: '#000000',
+				background: 'transparent',
+				fontWeight: 700,
+				},
+				tooltip: {
+				backgroundColor: '#ffffff',
+				color: '#000000',
+				}
+			}}
+			locale={{
+				back: 'Back',
+				close: 'Close',
+				last: 'Done',
+				next: 'Next',
+				skip: 'Skip',
+			}}
+			callback={handleJoyrideCallback}
+			/>
+		)}
       <div className="absolute right-0 left-0 py-2 max-w-5xl m-auto top-0 bg-gray-50 flex justify-end border-b h-16">
-        <ConnectButton />
+			<ConnectButton className="connect-joyride" />
       </div>
 
       <div className="mx-auto max-w-2xl mt-16 space-y-6">
@@ -260,7 +343,7 @@ export default function App() {
                   <button
                     onClick={createTodoList}
                     disabled={loading}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-blue-600 todo-joyride text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                   >
                     {loading ? "Processing..." : "Create List"}
                   </button>

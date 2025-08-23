@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client'
 import { createNetworkConfig, SuiClientProvider, lightTheme, WalletProvider } from '@mysten/dapp-kit';
 import { getFullnodeUrl } from '@mysten/sui/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 // Config options for the networks you want to connect to
@@ -18,6 +20,16 @@ createRoot(document.getElementById('root')!).render(
 		<SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
 			<WalletProvider autoConnect={true} theme={lightTheme}>
 				<App />
+				<ToastContainer
+					position="top-right"
+					autoClose={3000}
+					hideProgressBar
+					closeOnClick
+					pauseOnHover
+					draggable
+					toastClassName="!border-black !text-black"
+					icon={false}
+				/>	
 			</WalletProvider>
 		</SuiClientProvider>
 	</QueryClientProvider>
