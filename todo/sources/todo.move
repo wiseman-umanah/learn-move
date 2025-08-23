@@ -8,7 +8,7 @@ public struct TodoList has key, store {
 	name: String
 }
 
-public fun new(ctx: &mut TxContext, name: String): TodoList {
+public fun new(name: String, ctx: &mut TxContext, ): TodoList {
 	let list = TodoList {
 		id: object::new(ctx),
 		items: vector[],
