@@ -261,8 +261,6 @@ export default function App() {
 				backgroundColor: '#ffffff',
 				textColor: '#000000',
 				arrowColor: '#ffffff',
-				// overlayColor: 'rgba(0,0,0,0.7)',
-				// width: 380,
 				spotlightShadow: '0 0 0 1px #000000',
 				},
 				buttonNext: {
@@ -338,12 +336,12 @@ export default function App() {
                     value={listName}
                     onChange={(e) => setListName(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && createTodoList()}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                    className="flex-1 w-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   />
                   <button
                     onClick={createTodoList}
                     disabled={loading}
-                    className="px-4 py-2 bg-blue-600 todo-joyride text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 bg-blue-600 todo-joyride text-white rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                   >
                     {loading ? "Processing..." : "Create List"}
                   </button>
@@ -451,7 +449,7 @@ export default function App() {
                       value={newItem}
                       onChange={(e) => setNewItem(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addItem()}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                      className="flex-1 w-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     />
                     <button
                       onClick={addItem}
